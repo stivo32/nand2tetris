@@ -1,0 +1,43 @@
+	@24575
+	D=A
+	@maxindex
+	M=D
+(LOOP)
+	@SCREEN
+	D=A
+	@index
+	M=D
+	@KBD
+	D=M
+	@SETWHITE
+	D;JEQ
+	@SETBLACK
+	D;JNE
+(SETBLACK)
+	@color
+	M=-1
+	@FILL
+	0;JMP
+(SETWHITE)
+	@color
+	M=0
+	@FILL
+	0;JMP
+(FILL)
+	@index
+	D=M
+	@maxindex
+	D=M-D
+	@LOOP
+	D;JEQ
+	@color
+	D=M
+	@index
+	A=M
+	M=D
+	@index
+	M=M+1
+	@FILL
+	0;JMP
+
+
