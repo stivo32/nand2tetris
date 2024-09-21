@@ -20,9 +20,9 @@ vm_to_assembler_logic_operator_mapping = {
 
 
 class CodeWriter:
-    def __init__(self, filename):
+    def __init__(self):
         self.asm_program = []
-        self.filename = filename
+        self.filename = None
         self.memory_mapping = {
             'local': '@LCL',
             'argument': '@ARG',
@@ -35,6 +35,14 @@ class CodeWriter:
         self.comparing_index = 0
         self.temp_start = 5
 
+    def init(self):
+        self.asm_program.extend([
+
+        ])
+
+    def set_filename(self, filename):
+        self.filename = filename
+
     def translate(self, command, code_type, arg1, arg2):
         self.asm_program.append('// ' + command)
         if code_type == CommandType.C_ARITHMETIC:
@@ -46,6 +54,28 @@ class CodeWriter:
             self.pop_operation(arg1, arg2)
         elif code_type == CommandType.C_PUSH:
             self.push_operation(arg1, arg2)
+        elif code_type == CommandType.C_LABEL:
+            self.label_operation(arg1)
+        elif code_type == CommandType.C_GOTO:
+            self.goto_operation(arg1)
+        elif code_type == CommandType.C_IF:
+            self.if_operation(arg1)
+
+    def label_operation(self, arg1):
+        self.asm_program.append(f'({arg1.upper()})')
+
+    def goto_operation(self, arg1):
+        self.asm_program.extend([
+            f'@{arg1.upper()}',
+            '0;JMP',
+        ])
+
+    def if_operation(self, arg1):
+        self.get_from_stack()
+        self.asm_program.extend([
+            f'@{arg1.upper()}',
+            'D;JNE',
+        ])
 
     def write_constant_to_d(self, arg):
         self.asm_program.extend([
@@ -64,13 +94,13 @@ class CodeWriter:
     def write_d_to_register(self, register):
         self.asm_program.extend([
             f'@{register.upper()}',
-            'M=D'
+            'M=D',
         ])
 
     def read_from_register_to_d(self, register):
         self.asm_program.extend([
             f'@{register.upper()}',
-            'D=M'
+            'D=M',
         ])
 
     def read_value_from_memory_segment(self, arg1, arg2):

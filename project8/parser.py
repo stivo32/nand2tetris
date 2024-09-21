@@ -47,9 +47,13 @@ class Parser:
             self.arg2 = None
         elif command[0].startswith('label'):
             self._command_type = CommandType.C_LABEL
-            self.arg1 = command[0]
+            self.arg1 = command[1]
             self.arg2 = None
         elif command[0].startswith('goto'):
             self._command_type = CommandType.C_GOTO
-            self.arg1 = command[0]
+            self.arg1 = command[1]
+            self.arg2 = None
+        elif command[0].startswith('if-goto'):
+            self._command_type = CommandType.C_IF
+            self.arg1 = command[1]
             self.arg2 = None
