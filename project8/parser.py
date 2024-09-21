@@ -14,6 +14,8 @@ class Parser:
         self.arg2 = None
 
     def has_more_lines(self):
+        if not self._len:
+            return False
         if self._current_index is None:
             return True
         return self._current_index < self._len - 1
