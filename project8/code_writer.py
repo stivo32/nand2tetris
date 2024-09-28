@@ -94,7 +94,7 @@ class CodeWriter:
             self.put_on_stack()
 
     def call_operation(self, arg1, arg2):
-        return_label = f'RETURN_LABEL_{self.return_label_index}'
+        return_label = f'{arg1}$ret.{self.return_label_index}'
         self.asm_program += [
             f'@{return_label}',
             'D=A',
@@ -129,17 +129,17 @@ class CodeWriter:
         self.asm_program += [
             '@LCL',
             'D=M',
-            '@end_frame',
+            '@endFrame',
             'M=D',
-            '@end_frame',
+            '@endFrame',
             'D=M',
             '@5',
             'A=D-A',
             'D=M',
-            '@ret_addr',
+            '@retAddr',
             'M=D',
             '@SP',
-            'A=M-1',
+            'AM=M-1',
             'D=M',
             '@ARG',
             'A=M',
@@ -148,19 +148,33 @@ class CodeWriter:
             'D=M+1',
             '@SP',
             'M=D',
+            '@endFrame',
+            'M=M-1',
+            'A=M',
+            'D=M',
+            '@THAT',
+            'M=D',
+            '@endFrame',
+            'M=M-1',
+            'A=M',
+            'D=M',
+            '@THIS',
+            'M=D',
+            '@endFrame',
+            'M=M-1',
+            'A=M',
+            'D=M',
+            '@ARG',
+            'M=D',
+            '@endFrame',
+            'M=M-1',
+            'A=M',
+            'D=M',
+            '@LCL',
+            'M=D',
         ]
-        for i, segment in enumerate(reversed(["LCL", "ARG", "THIS", "THAT"]), start=1):
-            self.asm_program += [
-                '@end_frame',
-                'D=M',
-                f'@{i}',
-                'A=D-A',
-                'D=M',
-                f'@{segment}',
-                'M=D',
-            ]
         self.asm_program += [
-            '@return_addr',
+            '@retAddr',
             'A=M',
             '0;JMP',
         ]
