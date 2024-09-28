@@ -57,3 +57,15 @@ class Parser:
             self._command_type = CommandType.C_IF
             self.arg1 = command[1]
             self.arg2 = None
+        elif command[0].startswith('call'):
+            self._command_type = CommandType.C_CALL
+            self.arg1 = command[1]
+            self.arg2 = command[2]
+        elif command[0].startswith('function'):
+            self._command_type = CommandType.C_FUNCTION
+            self.arg1 = command[1]
+            self.arg2 = command[2]
+        elif command[0].startswith('return'):
+            self._command_type = CommandType.C_RETURN
+            self.arg1 = None
+            self.arg2 = None

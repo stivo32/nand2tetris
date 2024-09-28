@@ -37,7 +37,7 @@ def main():
             program = skip_comments(program)
             program = skip_empty_lines(program)
             parser = Parser(program)
-            code_writer.set_filename(path.name)
+            code_writer.set_filename(path.name.replace('.vm', ''))
             while parser.has_more_lines():
                 parser.advance()
                 command_type = parser.command_type()
